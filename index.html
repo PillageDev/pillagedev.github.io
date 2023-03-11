@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Console Output to Website</title>
+</head>
+<body>
+<h1>Console Output:</h1>
+<p id="console-output"></p>
+
+<button onclick="clearConsole()">Clear Console and Reopen Popup</button>
+
+<script>
+    let popupOpen = true;
+
+    function collatz(num) {
+        let steps = 0;
+        let output = "";
+        while (num !== 1n) {
+            if (num % 2n === 0n) {
+                num = num / 2n;
+                steps += 1;
+                output += num.toString() + "<br/>";
+            } else {
+                num = 3n * num + 1n;
+                steps += 1;
+                output += num.toString() + "<br/>";
+            }
+        }
+        output += "Number of steps: " + steps;
+        return output;
+    }
+
+    function fibonacci(num) {
+        let steps = 0;
+        let a = 0n;
+        let b = 1n;
+        let output = "";
+        while (steps < num) {
+            let c = a + b;
+            a = b;
+            b = c;
+            output += c.toLocaleString().replace(/,/g, "") + "<br/>";
+            steps += 1;
+            if (steps === num) {
+                break;
+            }
+        }
+        output += "Final number: " + b.toLocaleString().replace(/,/g, "") + "<br/>";
+        output += "Number of steps: " + steps;
+        return output;
+    }
+
+
+    function clearConsole() {
+        document.getElementById("console-output").innerHTML = "";
+        popupOpen = true;
+        openPopup();
+    }
+
+    function openPopup() {
+        if (popupOpen) {
+            let output = "";
+            output += "Which calculator do you want?<br/>";
+            output += "Collatz [C] Fibonacci [F]<br/>";
+            let choice = prompt("[C] or [F] (or [Q] to quit): ");
+            if (choice.toLowerCase() === "c") {
+                let startingNum = BigInt(prompt("Enter a number (starting point): "));
+                output += collatz(startingNum);
+                popupOpen = false;
+            } else if (choice.toLowerCase() === "f") {
+                let numTimes = parseInt(prompt("Enter a number (number of times to run sequence): "));
+                output += fibonacci(numTimes);
+                popupOpen = false;
+            } else if (choice.toLowerCase() === "q") {
+                popupOpen = false;
+            } else {
+                output += "Invalid choice, please try again.";
+            }
+            document.getElementById("console-output").innerHTML += output + "<br/><br/>";
+            if (popupOpen) {
+                openPopup();
+            }
+        }
+    }
+
+    openPopup();
+</script>
+</body>
+</html>
